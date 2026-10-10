@@ -1,0 +1,27 @@
+{
+  "name": "hybridge-blog-api",
+  "version": "1.0.0",
+  "description": "API RESTful básica construida con Node.js y Express para gestionar publicaciones de blog",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "api-rest",
+    "hybridge",
+    "backend"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
