@@ -1,3 +1,8 @@
+// Configura variables de entorno
+require('dotenv').config({ silent: true });
+
+const db = require('./models');
+
 // index.js
 const express = require('express');
 
@@ -5,13 +10,17 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Habilitar la lectura de cuerpos JSON en las peticiones
+app.use(express.json());
+
 // Ruta base
 app.get('/', (req, res) => {
   res.json({ message: 'Bienvenido a la API de Hybridge Blog Posts' });
 });
 
 // GET - Obtener todos los posts
-app.get('/api/posts', (req, res) => {
+app.get('/api/posts', async (req, res) => {
+  const posts = await db.Post.findAll();
   res.json(posts);
 });
 
@@ -57,4 +66,29 @@ app.post('/api/posts', (req, res) => {
 
   posts.push(newPost);
   res.status(201).json(newPost);
+});
+
+// POST - Crear un nuevo autor
+app.post('/api/authors', async (req, res) => {
+  const { name } = req.body;
+  const author = await db.Author.create({ name });
+  res.status(201).json(author);
+});
+
+// GET - Obtener todos los autores
+app.get('/api/authors', async (req, res) => {
+  const authors = await db.Author.findAll();
+  res.json(authors);
+});
+
+// GET - Obtener un autor por ID
+app.get('/api/authors/:id', async (req, res) => {
+  const { id } = req.params;
+  const author = await db.Author.findByPk(id);
+  
+  if (!author) {
+    return res.status(404).json({ error: 'Autor no encontrado' });
+  }
+
+  res.json(author);
 });
