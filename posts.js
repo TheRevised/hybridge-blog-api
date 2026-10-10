@@ -5,4 +5,4 @@ let posts = [
   { id: 2, title: 'Segundo post', content: 'Contenido del segundo post', author: 'Admin', date: new Date() }
 ];
 
-module.exports = posts;
+module.exports = posts
