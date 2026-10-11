@@ -43,31 +43,6 @@ app.delete('/api/posts', (req, res) => {
   return res.status(204).send();
 });
 
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
-
-// POST - Crear un nuevo post
-app.post('/api/posts', (req, res) => {
-  const { title, content, author } = req.body;
-  
-  if (!title || !content || !author) {
-    return res.status(400).json({ error: 'Todos los campos son requeridos' });
-  }
-
-  const newPost = {
-    id: posts.length + 1,
-    title,
-    content,
-    author,
-    date: new Date()
-  };
-
-  posts.push(newPost);
-  res.status(201).json(newPost);
-});
-
 // ESTA PARTE DEL CODIGO ES PARA LOS AUTORES
 // CRUD de autores
 
@@ -179,4 +154,9 @@ app.delete('/api/posts/:id', async (req, res) => {
 
   await post.destroy();
   res.json({ message: 'Post eliminado correctamente' });
+});
+
+// Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
