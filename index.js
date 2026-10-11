@@ -68,6 +68,9 @@ app.post('/api/posts', (req, res) => {
   res.status(201).json(newPost);
 });
 
+// ESTA PARTE DEL CODIGO ES PARA LOS AUTORES
+// CRUD de autores
+
 // POST - Crear un nuevo autor
 app.post('/api/authors', async (req, res) => {
   const { name } = req.body;
@@ -91,4 +94,89 @@ app.get('/api/authors/:id', async (req, res) => {
   }
 
   res.json(author);
+});
+
+// PATCH - Actualizar un autor por ID
+app.patch('/api/authors/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const author = await db.Author.findByPk(id);
+  
+  if (!author) {
+    return res.status(404).json({ error: 'Autor no encontrado' });
+  }
+
+  author.name = name;
+  await author.save();
+  res.json(author);
+});
+
+// DELETE - Eliminar un autor por ID
+app.delete('/api/authors/:id', async (req, res) => {
+  const { id } = req.params;
+  const author = await db.Author.findByPk(id);
+  
+  if (!author) {
+    return res.status(404).json({ error: 'Autor no encontrado' });
+  }
+
+  await author.destroy();
+  res.json({ message: 'Autor eliminado correctamente' });
+});
+
+// ESTA PARTE DEL CODIGO ES PARA LOS POSTS
+// CRUD de posts
+
+// POST - Crear un nuevo post
+app.post('/api/posts', async (req, res) => {
+  const { title, content, authorId } = req.body;
+  const post = await db.Post.create({ title, content, authorId });
+  res.status(201).json(post);
+});
+
+// GET - Obtener todos los posts
+app.get('/api/posts', async (req, res) => {
+  const posts = await db.Post.findAll();
+  res.json(posts);
+});
+
+// GET - Obtener un post por ID
+app.get('/api/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  const post = await db.Post.findByPk(id);
+  
+  if (!post) {
+    return res.status(404).json({ error: 'Post no encontrado' });
+  }
+
+  res.json(post);
+});
+
+// PATCH - Actualizar un post por ID
+app.patch('/api/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const post = await db.Post.findByPk(id);
+  
+  if (!post) {
+    return res.status(404).json({ error: 'Post no encontrado' });
+  }
+
+  post.title = title;
+  post.content = content;
+  await post.save();
+  res.json(post);
+});
+
+// DELETE - Eliminar un post por ID
+app.delete('/api/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  const post = await db.Post.findByPk(id);
+  
+  if (!post) {
+    return res.status(404).json({ error: 'Post no encontrado' });
+  }
+
+  await post.destroy();
+  res.json({ message: 'Post eliminado correctamente' });
 });
