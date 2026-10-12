@@ -10,6 +10,9 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const jwt           = require('jsonwebtoken');
 const bcrypt        = require('bcryptjs');
 
+// Middleware para proteger rutas con JWT
+const requireAuth = passport.authenticate('jwt', { session: false });
+
 // index.js
 const express = require('express');
 
@@ -54,7 +57,7 @@ app.delete('/api/posts', (req, res) => {
 // CRUD de autores
 
 // POST - Crear un nuevo autor
-app.post('/api/authors', async (req, res) => {
+app.post('/api/authors', requireAuth, async (req, res) => {
   const { name } = req.body;
   const author = await db.Author.create({ name });
   res.status(201).json(author);
@@ -79,7 +82,7 @@ app.get('/api/authors/:id', async (req, res) => {
 });
 
 // PATCH - Actualizar un autor por ID
-app.patch('/api/authors/:id', async (req, res) => {
+app.patch('/api/authors/:id',requireAuth, async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   const author = await db.Author.findByPk(id);
@@ -94,7 +97,7 @@ app.patch('/api/authors/:id', async (req, res) => {
 });
 
 // DELETE - Eliminar un autor por ID
-app.delete('/api/authors/:id', async (req, res) => {
+app.delete('/api/authors/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const author = await db.Author.findByPk(id);
   
@@ -110,7 +113,7 @@ app.delete('/api/authors/:id', async (req, res) => {
 // CRUD de posts
 
 // POST - Crear un nuevo post
-app.post('/api/posts', async (req, res) => {
+app.post('/api/posts', requireAuth, async (req, res) => {
   const { title, content, authorId } = req.body;
   const post = await db.Post.create({ title, content, authorId });
   res.status(201).json(post);
@@ -135,7 +138,7 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 // PATCH - Actualizar un post por ID
-app.patch('/api/posts/:id', async (req, res) => {
+app.patch('/api/posts/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const post = await db.Post.findByPk(id);
@@ -151,7 +154,7 @@ app.patch('/api/posts/:id', async (req, res) => {
 });
 
 // DELETE - Eliminar un post por ID
-app.delete('/api/posts/:id', async (req, res) => {
+app.delete('/api/posts/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const post = await db.Post.findByPk(id);
   
@@ -161,11 +164,6 @@ app.delete('/api/posts/:id', async (req, res) => {
 
   await post.destroy();
   res.json({ message: 'Post eliminado correctamente' });
-});
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
 /* ───── 2. Estrategia Local (login) ───── */
@@ -236,3 +234,8 @@ app.get('/api/profile',
     res.json({ id: req.user.id, email: req.user.email, msg: 'Acceso concedido 👋' });
   }
 );
+
+// Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
