@@ -1,7 +1,7 @@
 {
   "name": "hybridge-blog-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API RESTful desarrollada con **Node.js** y **Express** para la gestión de publicaciones de un blog. Proyecto creado como parte de la materia **Desarrollo Back-End** (6to Cuatrimestre - Hybridge).",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,12 +12,25 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^18.0.7",
     "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "pg": "^8.23.1",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheRevised/hybridge-blog-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheRevised/hybridge-blog-api/issues"
+  },
+  "homepage": "https://github.com/TheRevised/hybridge-blog-api#readme"
 }
